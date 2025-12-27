@@ -1,17 +1,54 @@
+import argparse
 import calendar
+import locale
+
+from datetime import datetime
+from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.pdfgen import canvas
-from reportlab.lib import colors
-from datetime import datetime
-import sys
 
-def create_year_plan(year=None, filename=None):
+
+# requires to install/generate locales
+# sudo locale-gen de_DE.UTF-8  # For German
+# sudo locale-gen en_US.UTF-8  # For English (US)
+
+
+supported_languages = ['en', 'de']
+
+
+def safe_set_locale(language: str):
+    variants = []
+
+    if language == 'en':
+        variants = ['en_US.UTF-8', 'en_US.utf8', 'en_US', 'C']
+    elif language == 'de':
+        variants = ['de_DE.UTF-8', 'de_DE.utf8', 'de_DE', 'deu_DEU', 'C']
+
+    for variant in variants:
+        try:
+            locale.setlocale(locale.LC_TIME, variant)
+            return variant
+        except locale.Error:
+            continue
+
+    return None
+
+
+def create_year_plan(year=None, language='en', filename=None):
     # Default: next year
     if year is None:
         year = datetime.now().year + 1
 
+    if language not in supported_languages:
+        language = 'en'
+
+    used_locale = safe_set_locale(language)
+    if not used_locale:
+        print(f'Warning: Could not set locale for language "{language}". Using default locale.')
+    print(used_locale)
+
     if filename is None:
-        filename = f"year_plan_{year}.pdf"
+        filename = f"year_plan_{year}_{language}.pdf"
 
     # PDF setup
     c = canvas.Canvas(filename, pagesize=landscape(A4))
@@ -32,9 +69,6 @@ def create_year_plan(year=None, filename=None):
     for i, month in enumerate(months):
         x = margin + i * cell_width
         c.drawCentredString(x + cell_width / 2, height - (1.5 * margin), month)
-
-    # German weekday abbreviations
-    weekday_abbr = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
 
     # Calendar logic
     cal = calendar.Calendar(firstweekday=0)  # Monday = 0
@@ -72,8 +106,7 @@ def create_year_plan(year=None, filename=None):
             else:
                 c.setFont("Helvetica", 8)
 
-            # Day label: "Mo 1", "Di 2", ...
-            day_label = f"{weekday_abbr[weekday]}"
+            day_label = f"{day.strftime('%a')} {day_of_month}"
             c.drawString(x + 2, y + 2, day_label)
             if weekday == 0:
                 c.setFont("Helvetica-Bold", 9)
@@ -83,13 +116,30 @@ def create_year_plan(year=None, filename=None):
     print(f"PDF created: {filename}")
 
 
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Create a year plan PDF")
+    parser.add_argument(
+        "-y", "--year",
+        type=int,
+        default=None,
+        help="Year to generate (default: next year)"
+    )
+    parser.add_argument(
+        "-l", "--language",
+        choices=set(supported_languages),
+        default="en",
+        help="Language for month names (choices: en, de)"
+    )
+    parser.add_argument(
+        "-o", "--output",
+        metavar="FILE",
+        default=None,
+        help="Output PDF filename (default: year_plan_{year}_{lang}.pdf)"
+    )
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        try:
-            year = int(sys.argv[1])
-        except ValueError:
-            print("Please provide a valid year, e.g. 2026")
-            sys.exit(1)
-        create_year_plan(year)
-    else:
-        create_year_plan()
+    args = parse_args()
+    create_year_plan(year=args.year, language=args.language, filename=args.output)
