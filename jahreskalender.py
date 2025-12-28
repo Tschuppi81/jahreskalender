@@ -107,10 +107,10 @@ def create_year_plan(year=None, language='en', filename=None):
                 c.setFont("Helvetica", 8)
 
             day_label = f"{day.strftime('%a')} {day_of_month}"
-            c.drawString(x + 2, y + 2, day_label)
+            c.drawString(x + 2, y + 4, day_label)
             if weekday == 0:
                 c.setFont("Helvetica-Bold", 9)
-                c.drawString(x + 48, y + 2, f'{week}')
+                c.drawString(x + 50, y + 4, f'{week}')
 
     c.save()
     print(f"PDF created: {filename}")
