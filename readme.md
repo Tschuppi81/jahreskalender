@@ -35,4 +35,7 @@ sudo locale-gen es_ES.UTF-8  # Spanish
 Currently supported languages are:
 - English US (`en`)
 - German (`de`)
+- French (`fr`)
+- Italian (`it`)
+- Spanish (`es`)
 
