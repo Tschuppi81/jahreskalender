@@ -8,7 +8,7 @@ from reportlab.lib.pagesizes import A4, landscape
 from reportlab.pdfgen import canvas
 
 
-supported_languages = ['en', 'de']
+supported_languages = ['en', 'de', 'fr', 'it', 'es']
 
 
 def safe_set_locale(language: str):
@@ -18,6 +18,15 @@ def safe_set_locale(language: str):
         variants = ['en_US.UTF-8', 'en_US.utf8', 'en_US', 'C']
     elif language == 'de':
         variants = ['de_DE.UTF-8', 'de_DE.utf8', 'de_DE', 'deu_DEU', 'C']
+    elif language == 'fr':
+        variants = ['fr_FR.UTF-8', 'fr_FR.utf8', 'fr_FR', 'fr_FR@euro', 'fr_FR.ISO8859-1', 'fr']
+    elif language == 'it':
+        variants = ['it_IT.UTF-8', 'it_IT.utf8', 'it_IT', 'ita_ITA', 'it']
+    elif language == 'es':
+        variants = ['es_ES.UTF-8', 'es_ES.utf8', 'es_ES', 'es_ES@euro', 'es_ES.ISO8859-1', 'es']
+    else:
+        # Unknown language: try system default only
+        variants = []
 
     for variant in variants:
         try:
@@ -102,7 +111,7 @@ def create_year_plan(year=None, language='en', filename=None):
                 c.setFont("Helvetica", 8)
 
             day_label = f"{day.strftime('%a')} {day_of_month}"
-            c.drawString(x + 2, y + 4, day_label)
+            c.drawString(x + 4, y + 4, day_label)
             if weekday == 0:
                 c.setFont("Helvetica-Bold", 9)
                 c.drawRightString(x + 60, y + 4, f'{week}')
