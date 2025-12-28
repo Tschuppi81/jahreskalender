@@ -23,6 +23,12 @@ python3 jahreskalender.py -l de
 ```
 
 ### Supported Languages
+You might need to install your language/locale prior running the script
+```
+sudo locale-gen de_DE.UTF-8  # For German
+sudo locale-gen en_US.UTF-8  # For English (US)
+```
+
 Currently supported languages are:
 - English US (`en`)
 - German (`de`)

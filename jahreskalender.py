@@ -8,11 +8,6 @@ from reportlab.lib.pagesizes import A4, landscape
 from reportlab.pdfgen import canvas
 
 
-# requires to install/generate locales
-# sudo locale-gen de_DE.UTF-8  # For German
-# sudo locale-gen en_US.UTF-8  # For English (US)
-
-
 supported_languages = ['en', 'de']
 
 
