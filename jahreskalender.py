@@ -49,7 +49,6 @@ def create_year_plan(year=None, language='en', filename=None):
     used_locale = safe_set_locale(language)
     if not used_locale:
         print(f'Warning: Could not set locale for language "{language}". Using default locale.')
-    print(used_locale)
 
     if filename is None:
         filename = f"year_plan_{year}_{language}.pdf"
