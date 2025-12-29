@@ -109,7 +109,7 @@ def create_year_plan(year=None, language='en', filename=None):
             else:
                 c.setFont("Helvetica", 8)
 
-            day_label = f"{day.strftime('%a')} {day_of_month}"
+            day_label = f"{day.strftime('%a').capitalize().rstrip('.')} {day_of_month}"
             c.drawString(x + 4, y + 4, day_label)
             if weekday == 0:
                 c.setFont("Helvetica-Bold", 9)
