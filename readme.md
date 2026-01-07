@@ -3,6 +3,9 @@
 You can either generate your calendar with the provided commands below or print the included PDF file
 in `year_plans`.
 
+Example for 2033
+<img width="974" height="690" alt="image" src="https://github.com/user-attachments/assets/9cd10f1d-e579-490c-8b3b-600227a82ecf" />
+
 ## Installation
 
 Install Python 3.12 or higher. Then create a virtual environment and install the required packages
